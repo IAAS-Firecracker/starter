@@ -22,7 +22,7 @@ PS3='🔧 Choisissez une action : '
 options=("Démarrer tous les services" "Arrêter tous les services" "Quitter")
 select opt in "${options[@]}"; do
     case $REPLY in
-        1) ACTION='up -d'; VERBE='Démarré'; break;;
+        1) BUILD=true; ACTION='up -d'; VERBE='Démarré'; break;;
         2) ACTION=stop; VERBE='Arrêté'; break;;
         3) echo '🚪 Sortie du script'; exit 0;;
         *) echo '❌ Option invalide'; exit 1;;
@@ -50,8 +50,21 @@ cd "$BASEDIR" || exit 1
 for dir in "${DIRECTORIES[@]}"; do
     dir_path="$dir/"
     if [[ -f "${dir_path}docker-compose.yml" ]]; then
-        echo "\n🚀 Traitement de $dir (commande: $ACTION)"
+        echo "\n🚀 Traitement de $dir"
         
+        if [ "$BUILD" = true ]; then
+            echo "🔨 Construction de $dir"
+            (cd "$dir_path" && docker-compose build)
+            build_status=$?
+            
+            if [ $build_status -ne 0 ]; then
+                echo "🤬 Échec de construction: $dir"
+                fail+=("$dir")
+                continue
+            fi
+        fi
+        
+        echo "🚀 Exécution de la commande: $ACTION pour $dir"
         (cd "$dir_path" && docker-compose $ACTION)
         status=$?
         
