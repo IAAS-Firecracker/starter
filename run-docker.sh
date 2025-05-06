@@ -17,6 +17,15 @@ DEFAULT_DIRS=(
     "service-vm-offer"
 )
 
+# Services dépendants de service-config
+dependents=(
+    "user-service"
+    "notification-service"
+    "service-cluster"
+    "service-system-image"
+    "service-vm-offer"
+)
+
 # Menu interactif
 PS3='🔧 Choisissez une action : '
 options=("Démarrer tous les services" "Arrêter tous les services" "Quitter")
@@ -47,6 +56,17 @@ fail=()
 
 cd "$BASEDIR" || exit 1
 
+# Fonction pour vérifier service-config
+check_service_config() {
+    if [ -d "service-config/" ]; then
+        (cd "service-config" && docker-compose ps | grep -q 'Up')
+        return $?
+    else
+        echo "❌ Le dossier service-config n'existe pas."
+        return 1
+    fi
+}
+
 for dir in "${DIRECTORIES[@]}"; do
     dir_path="$dir/"
     if [[ -f "${dir_path}docker-compose.yml" ]]; then
@@ -62,6 +82,18 @@ for dir in "${DIRECTORIES[@]}"; do
                 fail+=("$dir")
                 continue
             fi
+        fi
+        
+        # Vérification pour les services dépendants
+        if [ "$ACTION" = "up -d" ] && [[ " ${dependents[@]} " =~ " $dir " ]]; then
+            echo "🔍 Vérification que service-config est démarré..."
+            while ! check_service_config; do
+                echo "⚠️ service-config n'est pas démarré. Tentative de démarrage..."
+                #(cd "service-config" && docker-compose up -d)
+                echo "⏳ Attente de 10 secondes..."
+                sleep 10
+            done
+            echo "✅ service-config est démarré. Démarrage de $dir..."
         fi
         
         echo "🚀 Exécution de la commande: $ACTION pour $dir"
