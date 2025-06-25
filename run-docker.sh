@@ -6,24 +6,24 @@ set +e
 CONFIG_FILE="docker-order.conf"
 DEFAULT_DIRS=(
     "postgresql"
-    "rabbitmq"
+    # "rabbitmq"
     "service-config"
     "service-registry"
     "service-proxy"
-    "user-service"
-    "notification-service"
-    "service-cluster"
-    "service-system-image"
-    "service-vm-offer"
+    # "user-service"
+    # "notification-service"
+    # "service-cluster"
+    # "service-system-image"
+    # "service-vm-offer"
 )
 
 # Services dépendants de service-config
 dependents=(
-    "user-service"
-    "notification-service"
-    "service-cluster"
-    "service-system-image"
-    "service-vm-offer"
+    # "user-service"
+    # "notification-service"
+    # "service-cluster"
+    # "service-system-image"
+    # "service-vm-offer"
 )
 
 # Menu interactif
