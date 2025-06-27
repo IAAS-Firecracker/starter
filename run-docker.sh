@@ -10,7 +10,7 @@ DEFAULT_DIRS=(
     "service-config"
     "service-registry"
     "service-proxy"
-    # "user-service"
+    "user-service-py"
     # "notification-service"
     # "service-cluster"
     # "service-system-image"
@@ -19,7 +19,7 @@ DEFAULT_DIRS=(
 
 # Services dépendants de service-config
 dependents=(
-    # "user-service"
+    "user-service-py"
     # "notification-service"
     # "service-cluster"
     # "service-system-image"
