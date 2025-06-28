@@ -9,8 +9,8 @@ DEFAULT_DIRS=(
     # "rabbitmq"
     "service-config"
     "service-registry"
-    "service-proxy"
-    "user-service-py"
+    # "service-proxy"
+    # "user-service-py"
     # "notification-service"
     # "service-cluster"
     # "service-system-image"
@@ -19,7 +19,7 @@ DEFAULT_DIRS=(
 
 # Services dépendants de service-config
 dependents=(
-    "user-service-py"
+    # "user-service-py"
     # "notification-service"
     # "service-cluster"
     # "service-system-image"
